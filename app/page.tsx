@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { IconRail } from "@/components/layout/icon-rail";
 import { SideNav, SideNavExpandButton } from "@/components/layout/side-nav";
 import { TopHeader } from "@/components/layout/top-header";
-import { StatCardsRow } from "@/components/dashboard/stat-cards-row";
+import { StatCard } from "@/components/dashboard/stat-card";
 import { TrafficAnalyticsChart } from "@/components/dashboard/traffic-analytics-chart";
 import { TimeSeriesCard } from "@/components/dashboard/time-series-card";
 import {
@@ -18,11 +18,11 @@ export default function DashboardPage() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   return (
-    <div className="flex h-screen w-screen bg-surface text-text-primary overflow-hidden font-sans">
-      {/* 64px Fixed Icon Rail */}
+    <div className="flex h-screen w-screen bg-[#1E1E20] text-text-primary overflow-hidden font-sans">
+      {/* 68px Fixed Icon Rail */}
       <IconRail />
 
-      {/* 280px Collapsible Navigation Sidebar */}
+      {/* 240px Collapsible Navigation Sidebar */}
       <SideNav
         isCollapsed={isSidebarCollapsed}
         onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
@@ -36,38 +36,53 @@ export default function DashboardPage() {
       )}
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col h-screen overflow-y-auto min-w-0 bg-surface">
+      <main className="flex-1 flex flex-col h-screen overflow-y-auto min-w-0 bg-[#1E1E20]">
         <TopHeader />
 
-        <div className="px-8 py-6 space-y-6 max-w-[1600px] w-full mx-auto pb-12">
-          {/* 4 Stat Cards Row */}
-          <StatCardsRow stats={statCardsData} />
+        {/* Flush Grid Floor Layout (0px outer padding/margin against SideNav and TopNav) */}
+        <div className="p-0 space-y-[3px] w-full bg-[#1E1E20]">
+          {/* Row 1: 4 Equal Rectangular Metric Tile Blocks */}
+          <div className="grid grid-cols-12 gap-[3px] bg-[#1E1E20]">
+            {statCardsData.map((stat) => (
+              <div key={stat.id} className="col-span-12 sm:col-span-6 lg:col-span-3">
+                <StatCard {...stat} />
+              </div>
+            ))}
+          </div>
 
-          {/* Traffic Analytics Stacked Bar Chart */}
-          <TrafficAnalyticsChart data={trafficAnalyticsData} />
+          {/* Row 2: Traffic Analytics Main Tile Block */}
+          <div className="grid grid-cols-12 gap-[3px] bg-[#1E1E20]">
+            <div className="col-span-12">
+              <TrafficAnalyticsChart data={trafficAnalyticsData} />
+            </div>
+          </div>
 
-          {/* Side-by-side Time Series Area Charts */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <TimeSeriesCard
-              title="Organic rankings"
-              data={organicRankingsData.points}
-              averageValue={organicRankingsData.averageValue}
-              averageFormatted={organicRankingsData.averageFormatted}
-              startDate={organicRankingsData.startDate}
-              endDate={organicRankingsData.endDate}
-              pillType="dateRange"
-              pillValue="Last 6 months"
-            />
-            <TimeSeriesCard
-              title="Backlink"
-              data={backlinkData.points}
-              averageValue={backlinkData.averageValue}
-              averageFormatted={backlinkData.averageFormatted}
-              startDate={backlinkData.startDate}
-              endDate={backlinkData.endDate}
-              pillType="scope"
-              pillValue="Root domain"
-            />
+          {/* Row 3: Organic Rankings & Backlinks Tile Blocks */}
+          <div className="grid grid-cols-12 gap-[3px] bg-[#1E1E20]">
+            <div className="col-span-12 lg:col-span-6">
+              <TimeSeriesCard
+                title="Organic rankings"
+                data={organicRankingsData.points}
+                averageValue={organicRankingsData.averageValue}
+                averageFormatted={organicRankingsData.averageFormatted}
+                startDate={organicRankingsData.startDate}
+                endDate={organicRankingsData.endDate}
+                pillType="dateRange"
+                pillValue="Last 6 months"
+              />
+            </div>
+            <div className="col-span-12 lg:col-span-6">
+              <TimeSeriesCard
+                title="Backlink"
+                data={backlinkData.points}
+                averageValue={backlinkData.averageValue}
+                averageFormatted={backlinkData.averageFormatted}
+                startDate={backlinkData.startDate}
+                endDate={backlinkData.endDate}
+                pillType="scope"
+                pillValue="Root domain"
+              />
+            </div>
           </div>
         </div>
       </main>

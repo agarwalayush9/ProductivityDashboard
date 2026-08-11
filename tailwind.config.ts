@@ -10,10 +10,10 @@ const config: Config = {
     extend: {
       colors: {
         surface: {
-          DEFAULT: "#0B0D12",
-          panel: "#111318",
-          raised: "#171A21",
-          border: "#22252C",
+          DEFAULT: "#1E1E20",
+          panel: "#13151A",
+          raised: "#1A1C22",
+          border: "#252830",
         },
         text: {
           primary: "#F3F4F6",

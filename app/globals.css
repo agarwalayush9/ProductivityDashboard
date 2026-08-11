@@ -13,7 +13,16 @@
   font-feature-settings: "tnum";
 }
 
-/* Custom scrollbar styling for dark UI */
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom scrollbar styling for main content area */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
