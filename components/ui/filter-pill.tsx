@@ -1,13 +1,10 @@
 import React, { ComponentType } from "react";
-import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { CircleIconWrapper } from "@/components/ui/circle-icon-button";
 
 export interface FilterPillProps {
   label: string;
   value?: string;
   icon?: ComponentType<{ className?: string }>;
-  showChevron?: boolean;
   className?: string;
   onClick?: () => void;
 }
@@ -16,7 +13,6 @@ export function FilterPill({
   label,
   value,
   icon: Icon,
-  showChevron = true,
   className,
   onClick,
 }: FilterPillProps) {
@@ -25,20 +21,13 @@ export function FilterPill({
       type="button"
       onClick={onClick}
       className={cn(
-        "inline-flex items-center gap-2.5 bg-surface-raised hover:bg-surface-border/50 text-text-secondary hover:text-text-primary border border-surface-border/50 rounded-full pl-1.5 pr-3.5 py-1 text-xs font-medium transition-colors cursor-pointer select-none",
+        "inline-flex items-center gap-2 bg-[#202228] border border-[#2B2E37] shadow-[inset_0_1px_1px_rgba(255,255,255,0.06),0_2px_4px_rgba(0,0,0,0.3)] hover:bg-[#252830] text-[#8F96A3] rounded-full px-4 py-2 text-sm font-medium transition-all cursor-pointer select-none",
         className
       )}
     >
-      {Icon && (
-        <CircleIconWrapper
-          icon={Icon as React.ElementType}
-          size={24}
-          iconSize={12}
-        />
-      )}
-      <span className="text-text-muted">{label}:</span>
-      {value && <span className="font-semibold text-text-primary">{value}</span>}
-      {showChevron && <ChevronDown className="w-3 h-3 text-text-muted ml-0.5" />}
+      {Icon && <Icon className="w-4 h-4 text-[#8F96A3] stroke-[1.8]" />}
+      <span className="text-[#8F96A3]">{label}:</span>
+      {value && <span className="font-medium text-white">{value}</span>}
     </button>
   );
 }

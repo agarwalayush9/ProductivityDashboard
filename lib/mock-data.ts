@@ -1,4 +1,4 @@
-import { Eye, Users, Clock, ArrowLeftRight } from "lucide-react";
+import { Monitor, User, Clock, MousePointerClick } from "lucide-react";
 import { StatCardData, TrafficPoint, SeriesPoint } from "@/types/dashboard";
 
 export const statCardsData: StatCardData[] = [
@@ -8,7 +8,7 @@ export const statCardsData: StatCardData[] = [
     value: "1.85M",
     deltaPercent: -18.6,
     deltaLabel: "vs. previous 30 days",
-    icon: Eye,
+    icon: Monitor,
   },
   {
     id: "unique-visitors",
@@ -16,7 +16,7 @@ export const statCardsData: StatCardData[] = [
     value: "738.2K",
     deltaPercent: 11.2,
     deltaLabel: "vs. previous 30 days",
-    icon: Users,
+    icon: User,
   },
   {
     id: "avg-visit-duration",
@@ -32,7 +32,7 @@ export const statCardsData: StatCardData[] = [
     value: "1,842",
     deltaPercent: -2.83,
     deltaLabel: "vs. previous 30 days",
-    icon: ArrowLeftRight,
+    icon: MousePointerClick,
   },
 ];
 

@@ -1,19 +1,19 @@
 import React from "react";
 import { FilterPill } from "@/components/ui/filter-pill";
-import { Globe, Calendar } from "lucide-react";
+import { Layers, Calendar } from "lucide-react";
 
 export function TopHeader() {
   return (
-    <header className="h-16 px-8 border-b border-surface-border flex items-center justify-between bg-surface-panel/40 backdrop-blur-sm sticky top-0 z-10">
+    <header className="h-16 px-8 border-b border-[#1E2129] flex items-center justify-between bg-[#13151A] sticky top-0 z-10 select-none">
       {/* Title */}
       <div>
-        <h1 className="text-xl font-semibold text-text-primary">Dashboard</h1>
+        <h1 className="text-base font-bold tracking-wide text-text-primary">Dashboard</h1>
       </div>
 
       {/* Filter Pills */}
       <div className="flex items-center gap-3">
         <FilterPill
-          icon={Globe}
+          icon={Layers}
           label="Scope"
           value="Root domain"
         />
