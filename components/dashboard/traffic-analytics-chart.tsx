@@ -7,6 +7,7 @@ import {
   XAxis,
   Tooltip,
   ResponsiveContainer,
+  CartesianGrid,
 } from "recharts";
 import { Card } from "@/components/ui/card";
 import { FilterPill } from "@/components/ui/filter-pill";
@@ -17,24 +18,86 @@ interface TrafficAnalyticsChartProps {
   data: TrafficPoint[];
 }
 
-// Custom Top Label for stacked bar total
+// Helper to format values with K suffix if >= 1000
+const formatKValue = (num: number) => {
+  if (num >= 1000) {
+    return (num / 1000).toFixed(1) + "K";
+  }
+  return num.toString();
+};
+
+// Custom Top Label for stacked bar total (e.g. 23.9K)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CustomTotalLabel = (props: any) => {
   const { x, y, width, payload } = props;
   if (!payload) return null;
-  const total = payload.direct + payload.organic + payload.paid;
+  const total = payload.organic + payload.direct + payload.paid;
   return (
     <text
       x={x + width / 2}
-      y={y - 8}
-      fill="#9CA3AF"
+      y={y - 12}
+      fill="#FFFFFF"
       textAnchor="middle"
-      fontSize={10}
+      fontSize={12}
       fontWeight={600}
       className="tabular-nums select-none"
     >
-      {total.toLocaleString()}
+      {formatKValue(total)}
     </text>
+  );
+};
+
+// Custom Bar Renderer to render all 3 segments exactly on top of each other
+// with 20% border radius
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const StackedCapsuleBar = (props: any) => {
+  const { x, y, width, height, payload } = props;
+  if (!height || height <= 0) return null;
+
+  // 20% border radius
+  const r = Math.round(width * 0.3);
+  const total = payload.organic + payload.direct + payload.paid;
+  if (total === 0) return null;
+
+  const organicH = height * (payload.organic / total);
+  const directH = height * ((payload.organic + payload.direct) / total);
+  const totalH = height;
+
+  const baseY = y + height;
+
+  return (
+    <g>
+      {/* Pink Bar (Total) */}
+      <rect
+        x={x}
+        y={baseY - totalH}
+        width={width}
+        height={totalH}
+        rx={r}
+        ry={r}
+        fill="#E258D3"
+      />
+      {/* Blue Bar (Organic + Direct) */}
+      <rect
+        x={x}
+        y={baseY - directH}
+        width={width}
+        height={directH}
+        rx={r}
+        ry={r}
+        fill="#4FA2EA"
+      />
+      {/* Purple Bar (Organic) */}
+      <rect
+        x={x}
+        y={baseY - organicH}
+        width={width}
+        height={organicH}
+        rx={r}
+        ry={r}
+        fill="url(#hatchPurple)"
+      />
+    </g>
   );
 };
 
@@ -44,33 +107,39 @@ export function TrafficAnalyticsChart({ data }: TrafficAnalyticsChartProps) {
   useEffect(() => {
     setMounted(true);
   }, []);
-  return (
-    <Card className="p-6 space-y-6">
-      {/* Card Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-6">
-          <h2 className="text-base font-semibold text-text-primary">
-            Traffic analytics
-          </h2>
 
-          {/* Inline Legend */}
-          <div className="flex items-center gap-4 text-xs font-medium">
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-brand-blue" />
-              <span className="text-text-secondary">Direct</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-brand-purple" />
-              <span className="text-text-secondary">Organic search</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-brand-pink" />
-              <span className="text-text-secondary">Paid search</span>
-            </div>
+  // Compute total height for the single Bar
+  const chartData = data.map((item) => ({
+    ...item,
+    totalHeight: item.organic + item.direct + item.paid,
+  }));
+
+  return (
+    <Card className="p-6 space-y-6 bg-[#13151A]">
+      {/* Card Header matching reference orientation and sizes */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        {/* Left Title */}
+        <h2 className="text-base font-bold text-white tracking-wide">
+          Traffic analytics
+        </h2>
+
+        {/* Center Legend Dot Stack */}
+        <div className="flex items-center gap-6 text-sm font-medium text-[#8F96A3]">
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-[#4FA2EA] shrink-0" />
+            <span>Direct</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-[#996BE4] shrink-0" />
+            <span>Organic search</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-[#E258D3] shrink-0" />
+            <span>Paid search</span>
           </div>
         </div>
 
-        {/* Date Range Pill */}
+        {/* Right Date Range Pill */}
         <FilterPill
           icon={Calendar}
           label="Date range"
@@ -78,32 +147,39 @@ export function TrafficAnalyticsChart({ data }: TrafficAnalyticsChartProps) {
         />
       </div>
 
-      {/* Stacked Bar Chart */}
-      <div className="h-[260px] w-full pt-2">
+      {/* Complete from Base Bar Chart */}
+      <div className="h-[280px] w-full pt-2">
         {mounted ? (
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
-              data={data}
-              margin={{ top: 24, right: 10, left: 10, bottom: 0 }}
-              barCategoryGap="25%"
+              data={chartData}
+              margin={{ top: 32, right: 10, left: 10, bottom: 0 }}
+              barCategoryGap="28%"
             >
-              {/* SVG Defs for Diagonal Hatch Pattern on Organic series */}
+              {/* Dashed Horizontal Background Grid Lines */}
+              <CartesianGrid
+                strokeDasharray="3 3"
+                vertical={false}
+                stroke="#22252E"
+              />
+
+              {/* SVG Defs for Diagonal Hatch Pattern on Organic (Purple) Series */}
               <defs>
                 <pattern
-                  id="diagonalHatch"
+                  id="hatchPurple"
                   patternUnits="userSpaceOnUse"
-                  width="8"
+                  width="10"
                   height="8"
-                  patternTransform="rotate(45)"
+                  patternTransform="rotate(-20)"
                 >
-                  <rect width="8" height="8" fill="#A855F7" />
+                  <rect width="10" height="8" fill="#996BE4" />
                   <line
                     x1="0"
                     y1="0"
-                    x2="0"
-                    y2="8"
-                    stroke="#8B5CF6"
-                    strokeWidth="2.5"
+                    x2="10"
+                    y2="0"
+                    stroke="#1A1C24"
+                    strokeWidth="3"
                   />
                 </pattern>
               </defs>
@@ -115,29 +191,29 @@ export function TrafficAnalyticsChart({ data }: TrafficAnalyticsChartProps) {
                     const item = payload[0].payload as TrafficPoint;
                     const total = item.direct + item.organic + item.paid;
                     return (
-                      <div className="bg-surface-panel/95 border border-surface-border p-3 rounded-lg shadow-xl text-xs space-y-1.5 backdrop-blur-md">
-                        <div className="font-semibold text-text-primary pb-1 border-b border-surface-border/60">
+                      <div className="bg-[#1A1C22] border border-[#2B2E37] p-3 rounded-xl shadow-xl text-xs space-y-1.5 backdrop-blur-md">
+                        <div className="font-semibold text-white pb-1 border-b border-[#2B2E37]">
                           {item.date}
                         </div>
-                        <div className="flex items-center justify-between gap-4 text-brand-blue">
+                        <div className="flex items-center justify-between gap-4 text-[#4FA2EA]">
                           <span>Direct:</span>
                           <span className="font-semibold tabular-nums">
                             {item.direct}
                           </span>
                         </div>
-                        <div className="flex items-center justify-between gap-4 text-brand-purple">
+                        <div className="flex items-center justify-between gap-4 text-[#996BE4]">
                           <span>Organic search:</span>
                           <span className="font-semibold tabular-nums">
                             {item.organic}
                           </span>
                         </div>
-                        <div className="flex items-center justify-between gap-4 text-brand-pink">
+                        <div className="flex items-center justify-between gap-4 text-[#E258D3]">
                           <span>Paid search:</span>
                           <span className="font-semibold tabular-nums">
                             {item.paid}
                           </span>
                         </div>
-                        <div className="flex items-center justify-between gap-4 text-text-primary pt-1 border-t border-surface-border/60 font-semibold">
+                        <div className="flex items-center justify-between gap-4 text-white pt-1 border-t border-[#2B2E37] font-semibold">
                           <span>Total:</span>
                           <span className="tabular-nums">{total}</span>
                         </div>
@@ -148,27 +224,10 @@ export function TrafficAnalyticsChart({ data }: TrafficAnalyticsChartProps) {
                 }}
               />
 
-              {/* Bottom Series: Direct (Blue) */}
+              {/* A single Bar component handles rendering all three segments via a custom shape */}
               <Bar
-                dataKey="direct"
-                stackId="a"
-                fill="#38BDF8"
-                radius={[0, 0, 4, 4]}
-              />
-
-              {/* Middle Series: Organic Search (Purple Hatch Pattern) */}
-              <Bar
-                dataKey="organic"
-                stackId="a"
-                fill="url(#diagonalHatch)"
-              />
-
-              {/* Top Series: Paid Search (Pink) with Total Stack Label */}
-              <Bar
-                dataKey="paid"
-                stackId="a"
-                fill="#EC4899"
-                radius={[4, 4, 0, 0]}
+                dataKey="totalHeight"
+                shape={<StackedCapsuleBar />}
                 label={<CustomTotalLabel />}
               />
 
@@ -176,12 +235,12 @@ export function TrafficAnalyticsChart({ data }: TrafficAnalyticsChartProps) {
             </BarChart>
           </ResponsiveContainer>
         ) : (
-          <div className="h-full w-full bg-surface-raised/20 animate-pulse rounded-lg" />
+          <div className="h-full w-full bg-[#1A1C22]/50 animate-pulse rounded-lg" />
         )}
       </div>
 
       {/* Axis Footer: Start & End Date */}
-      <div className="flex items-center justify-between text-xs font-medium text-text-muted pt-1 border-t border-surface-border/40">
+      <div className="flex items-center justify-between text-xs font-medium text-[#6B7280] pt-1 border-t border-[#20232B]">
         <span>January 1, 2026</span>
         <span>July 1, 2026</span>
       </div>
