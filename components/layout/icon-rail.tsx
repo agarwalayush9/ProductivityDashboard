@@ -2,91 +2,88 @@
 
 import React, { useState } from "react";
 import {
-  LayoutDashboard,
-  Target,
-  Wand2,
-  BarChart2,
-  MapPin,
-  MessageSquare,
-  Megaphone,
   MousePointerClick,
   Moon,
   Sun,
   LogOut,
   User,
-  Activity,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Logo } from "@/components/ui/logo";
+import { CircleIconButton } from "@/components/ui/circle-icon-button";
+import { HomeCircleIcon } from "@/components/ui/home-circle-button";
+import {
+  TargetDartIcon,
+  MagicWandSparkleIcon,
+  BarChartColumnsIcon,
+  MapPinDotIcon,
+  DoubleChatBubblesIcon,
+  CustomMegaphoneIcon,
+} from "@/components/ui/custom-icons";
 
 export function IconRail() {
-  const [activeIdx, setActiveIdx] = useState(1); // 2nd icon highlighted by default as per reference spec
+  const [activeIdx, setActiveIdx] = useState(1); // 2nd item (Target) active by default as per screenshot
 
   const railIcons = [
-    { icon: LayoutDashboard, label: "Overview" },
-    { icon: Target, label: "Tracker" },
-    { icon: Wand2, label: "Magic Tool" },
-    { icon: BarChart2, label: "Analytics" },
-    { icon: MapPin, label: "Local SEO" },
-    { icon: MessageSquare, label: "Feedback" },
-    { icon: Megaphone, label: "Campaigns" },
+    { icon: HomeCircleIcon, label: "Home" },
+    { icon: TargetDartIcon, label: "Tracker" },
+    { icon: MagicWandSparkleIcon, label: "Magic Tool" },
+    { icon: BarChartColumnsIcon, label: "Analytics" },
+    { icon: MapPinDotIcon, label: "Local SEO" },
+    { icon: DoubleChatBubblesIcon, label: "Feedback" },
+    { icon: CustomMegaphoneIcon, label: "Campaigns" },
     { icon: MousePointerClick, label: "PPC" },
   ];
 
   return (
-    <aside className="w-[64px] min-w-[64px] h-screen bg-surface-panel border-r border-surface-border flex flex-col items-center py-4 z-20 select-none">
-      {/* Top Logo */}
-      <div className="w-10 h-10 rounded-xl bg-brand-blue flex items-center justify-center text-surface shadow-lg shadow-brand-blue/20 mb-6 cursor-pointer hover:opacity-90 transition-opacity">
-        <Activity className="w-6 h-6 stroke-[2.5]" />
+    <aside className="w-[68px] min-w-[68px] h-screen bg-[#131417] border-r border-[#20232B] flex flex-col items-center select-none z-20">
+      {/* Top Logo Section matching reference image header */}
+      <div className="w-full h-16 flex items-center justify-center border-b border-[#20232B] hover:opacity-90 transition-opacity cursor-pointer">
+        <Logo size={34} color="#2BB0ED" />
       </div>
 
-      {/* Middle Icon Stack */}
-      <nav className="flex flex-col gap-3 items-center">
-        {railIcons.map((item, idx) => {
-          const Icon = item.icon;
-          const isActive = idx === activeIdx;
-          return (
-            <button
-              key={idx}
-              title={item.label}
-              onClick={() => setActiveIdx(idx)}
-              className={cn(
-                "w-9 h-9 rounded-lg flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-raised transition-all",
-                isActive &&
-                  "bg-brand-blue/15 text-brand-blue font-semibold hover:bg-brand-blue/20 hover:text-brand-blue"
-              )}
-            >
-              <Icon className="w-5 h-5" />
-            </button>
-          );
-        })}
+      {/* Vertical Icon Stack using exact circular buttons */}
+      <nav className="flex flex-col gap-3.5 items-center py-5">
+        {railIcons.map((item, idx) => (
+          <CircleIconButton
+            key={idx}
+            icon={item.icon}
+            title={item.label}
+            size={42}
+            iconSize={20}
+            active={idx === activeIdx}
+            onClick={() => setActiveIdx(idx)}
+          />
+        ))}
       </nav>
 
       {/* Bottom Actions */}
-      <div className="mt-auto flex flex-col gap-3 items-center pt-4 border-t border-surface-border/50">
-        <button
+      <div className="mt-auto flex flex-col gap-3 items-center py-4 border-t border-[#20232B]">
+        <CircleIconButton
+          icon={User}
           title="User Profile"
-          className="w-9 h-9 rounded-full bg-surface-raised flex items-center justify-center text-text-secondary hover:text-text-primary transition-colors border border-surface-border"
-        >
-          <User className="w-4 h-4" />
-        </button>
-        <button
+          size={38}
+          iconSize={18}
+        />
+        <CircleIconButton
+          icon={Moon}
           title="Dark Mode (Active)"
-          className="w-9 h-9 rounded-lg flex items-center justify-center bg-surface-raised text-text-primary transition-colors"
-        >
-          <Moon className="w-5 h-5 text-brand-blue" />
-        </button>
-        <button
+          size={38}
+          iconSize={18}
+          active
+        />
+        <CircleIconButton
+          icon={Sun}
           title="Light Mode"
-          className="w-9 h-9 rounded-lg flex items-center justify-center text-text-muted hover:text-text-secondary transition-colors"
-        >
-          <Sun className="w-5 h-5" />
-        </button>
-        <button
+          size={38}
+          iconSize={18}
+        />
+        <CircleIconButton
+          icon={LogOut}
           title="Logout"
-          className="w-9 h-9 rounded-lg flex items-center justify-center text-status-negative/70 hover:text-status-negative hover:bg-status-negative/10 transition-colors"
-        >
-          <LogOut className="w-5 h-5" />
-        </button>
+          size={38}
+          iconSize={18}
+          className="hover:text-status-negative hover:border-status-negative/30 hover:bg-status-negative/10"
+        />
       </div>
     </aside>
   );
