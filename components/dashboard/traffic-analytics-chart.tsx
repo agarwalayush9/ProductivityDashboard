@@ -5,6 +5,7 @@ import {
   BarChart,
   Bar,
   XAxis,
+  YAxis,
   Tooltip,
   ResponsiveContainer,
   CartesianGrid,
@@ -29,20 +30,19 @@ const formatKValue = (num: number) => {
 // Custom Top Label for stacked bar total (e.g. 23.9K)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CustomTotalLabel = (props: any) => {
-  const { x, y, width, payload } = props;
-  if (!payload) return null;
-  const total = payload.organic + payload.direct + payload.paid;
+  const { x, y, width, value } = props;
+  if (value == null) return null;
   return (
     <text
       x={x + width / 2}
       y={y - 12}
-      fill="#FFFFFF"
+      fill="#D1D5DB"
       textAnchor="middle"
       fontSize={12}
       fontWeight={600}
       className="tabular-nums select-none"
     >
-      {formatKValue(total)}
+      {formatKValue(value)}
     </text>
   );
 };
@@ -75,7 +75,7 @@ const StackedCapsuleBar = (props: any) => {
         height={totalH}
         rx={r}
         ry={r}
-        fill="#E258D3"
+        fill="#d84ec8ff"
       />
       {/* Blue Bar (Organic + Direct) */}
       <rect
@@ -154,7 +154,7 @@ export function TrafficAnalyticsChart({ data }: TrafficAnalyticsChartProps) {
             <BarChart
               data={chartData}
               margin={{ top: 32, right: 10, left: 10, bottom: 0 }}
-              barCategoryGap="28%"
+              barCategoryGap="18%"
             >
               {/* Dashed Horizontal Background Grid Lines */}
               <CartesianGrid

@@ -38,19 +38,22 @@ export const statCardsData: StatCardData[] = [
 
 // ~13 points representing bi-weekly intervals from Jan 1, 2026 to Jul 1, 2026
 export const trafficAnalyticsData: TrafficPoint[] = [
-  { date: "Jan 1", direct: 240, organic: 520, paid: 180 },
-  { date: "Jan 15", direct: 280, organic: 490, paid: 210 },
-  { date: "Feb 1", direct: 310, organic: 550, paid: 260 },
-  { date: "Feb 15", direct: 350, organic: 610, paid: 290 },
-  { date: "Mar 1", direct: 320, organic: 580, paid: 270 },
-  { date: "Mar 15", direct: 390, organic: 640, paid: 320 },
-  { date: "Apr 1", direct: 420, organic: 700, paid: 350 },
-  { date: "Apr 15", direct: 400, organic: 680, paid: 330 },
-  { date: "May 1", direct: 450, organic: 740, paid: 380 },
-  { date: "May 15", direct: 480, organic: 790, paid: 410 },
-  { date: "Jun 1", direct: 510, organic: 830, paid: 440 },
-  { date: "Jun 15", direct: 490, organic: 810, paid: 420 },
-  { date: "Jul 1", direct: 530, organic: 860, paid: 460 },
+  { date: "Jan 1", organic: 10500, direct: 3000, paid: 10400 },
+  { date: "Jan 12", organic: 6200, direct: 1500, paid: 4700 },
+  { date: "Jan 24", organic: 3300, direct: 1500, paid: 3500 },
+  { date: "Feb 4", organic: 7300, direct: 2000, paid: 5000 },
+  { date: "Feb 16", organic: 6000, direct: 2000, paid: 4100 },
+  { date: "Feb 28", organic: 10000, direct: 5400, paid: 7000 },
+  { date: "Mar 11", organic: 13000, direct: 5000, paid: 7100 },
+  { date: "Mar 23", organic: 4000, direct: 3500, paid: 7000 },
+  { date: "Apr 4", organic: 12000, direct: 3800, paid: 9000 },
+  { date: "Apr 16", organic: 5000, direct: 3400, paid: 4000 },
+  { date: "Apr 28", organic: 8900, direct: 3000, paid: 6000 },
+  { date: "May 10", organic: 5500, direct: 2500, paid: 4500 },
+  { date: "May 22", organic: 7300, direct: 2000, paid: 5000 },
+  { date: "Jun 3", organic: 14100, direct: 2000, paid: 8000 },
+  { date: "Jun 15", organic: 6200, direct: 3500, paid: 4500 },
+  { date: "Jun 27", organic: 6000, direct: 1500, paid: 4700 },
 ];
 
 export const organicRankingsData: {
