@@ -30,12 +30,16 @@ const formatKValue = (num: number) => {
 // Custom Top Label for stacked bar total (e.g. 23.9K)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CustomTotalLabel = (props: any) => {
-  const { x, y, width, value } = props;
+  const { x, y, width, value, viewBox } = props;
   if (value == null) return null;
+  
+  // Shift the label up by the 5% extra height we added to the bar
+  const extraHeight = viewBox?.height ? viewBox.height * 0.05 : 0;
+  
   return (
     <text
       x={x + width / 2}
-      y={y - 12}
+      y={y - 12 - extraHeight}
       fill="#D1D5DB"
       textAnchor="middle"
       fontSize={12}
@@ -59,9 +63,12 @@ const StackedCapsuleBar = (props: any) => {
   const total = payload.organic + payload.direct + payload.paid;
   if (total === 0) return null;
 
-  const organicH = height * (payload.organic / total);
-  const directH = height * ((payload.organic + payload.direct) / total);
-  const totalH = height;
+  // Increase total height by 5%
+  const adjustedHeight = height * 1.05;
+
+  const organicH = adjustedHeight * (payload.organic / total);
+  const directH = adjustedHeight * ((payload.organic + payload.direct) / total);
+  const totalH = adjustedHeight;
 
   const baseY = y + height;
 
@@ -232,7 +239,7 @@ export function TrafficAnalyticsChart({ data }: TrafficAnalyticsChartProps) {
               />
 
               <XAxis dataKey="date" hide />
-              <YAxis hide domain={[0, 30000]} />
+              <YAxis hide domain={[0, 30000]} tickCount={7} />
             </BarChart>
           </ResponsiveContainer>
         ) : (
@@ -241,8 +248,7 @@ export function TrafficAnalyticsChart({ data }: TrafficAnalyticsChartProps) {
       </div>
 
       {/* Axis Footer: Start & End Date */}
-      <div className="flex items-center justify-between text-xs font-medium text-[#6B7280] pt-1">
-
+      <div className="flex items-center justify-between text-sm font-medium text-[#6B7280] pt-1">
         <span>January 1, 2026</span>
         <span>July 1, 2026</span>
       </div>

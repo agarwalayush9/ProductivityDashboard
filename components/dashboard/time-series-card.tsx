@@ -6,6 +6,7 @@ import {
   Area,
   ReferenceLine,
   XAxis,
+  YAxis,
   Tooltip,
   ResponsiveContainer,
   CartesianGrid,
@@ -35,45 +36,54 @@ const AverageBadgeLabel = (props: { viewBox?: any; value?: string }) => {
 
   return (
     <g>
+      <defs>
+        <linearGradient id="highlight-gradient" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#FFFFFF" stopOpacity={0.08} />
+          <stop offset="100%" stopColor="#FFFFFF" stopOpacity={0.0} />
+        </linearGradient>
+      </defs>
+
       {/* Highlight column behind the line */}
-      <rect x={x - 45} y={0} width="90" height={height} fill="#FFFFFF" fillOpacity="0.04" />
+      <rect x={x - 70} y={10} width="140" height={height} fill="url(#highlight-gradient)" />
 
       {/* Dotted reference line starting below the badge */}
       <line
         x1={x}
-        y1={42}
+        y1={75}
         x2={x}
-        y2={height}
+        y2={y + height}
         stroke="#D1D5DB"
         strokeDasharray="3 3"
         strokeWidth="1"
       />
 
       {/* Badge container shifted to be at the top */}
-      <g transform={`translate(${x - 45}, 10)`}>
-        {/* Pill background */}
-        <rect width="90" height="28" rx="14" fill="#202228" stroke="#33353A" strokeWidth="1" />
+      <g transform={`translate(${x - 60}, 20)`}>
+        {/* Pill background (Outer dark stroke) */}
+        <rect width="120" height="36" rx="18" fill="#24262B" stroke="#16181C" strokeWidth="1" />
+        {/* Pill Inner Highlight (Glassy top edge effect) */}
+        <rect width="118" height="34" rx="17" x="1" y="1" fill="none" stroke="#FFFFFF" strokeOpacity="0.06" strokeWidth="1" />
 
-        {/* Blue chart icon */}
-        <rect x="14" y="14" width="3" height="6" rx="1.5" fill="#1CA0F2" />
-        <rect x="19" y="10" width="3" height="10" rx="1.5" fill="#1CA0F2" />
-        <rect x="24" y="12" width="3" height="8" rx="1.5" fill="#1CA0F2" />
+        {/* Flexbox container for flawless centering */}
+        <foreignObject width="120" height="36" x="0" y="0">
+          <div className="w-full h-full flex items-center justify-center gap-2">
+            {/* Blue chart icon */}
+            <div className="flex items-end gap-[2px] h-[14px]">
+              <div className="w-[3.5px] h-[7px] bg-[#1CA0F2] rounded-full" />
+              <div className="w-[3.5px] h-[13px] bg-[#1CA0F2] rounded-full" />
+              <div className="w-[3.5px] h-[10px] bg-[#1CA0F2] rounded-full" />
+            </div>
 
-        {/* Text */}
-        <text
-          x="32"
-          y="19"
-          fill="#D1D5DB"
-          fontSize="11"
-          fontWeight="500"
-          className="font-sans"
-        >
-          Avg {value}
-        </text>
+            {/* Text */}
+            <span className="text-white text-[14px] font-medium font-sans">
+              Avg {value}
+            </span>
+          </div>
+        </foreignObject>
       </g>
 
-      {/* White downward triangle at the bottom of the pill */}
-      <polygon points={`${x - 4},38 ${x + 4},38 ${x},44`} fill="#FFFFFF" />
+      {/* White downward triangle starting at the 2nd dotted line */}
+      <polygon points={`${x - 4.5},61 ${x + 4.5},61 ${x},70`} fill="#FFFFFF" />
     </g>
   );
 };
@@ -165,6 +175,7 @@ export function TimeSeriesCard({
               />
 
               <XAxis dataKey="date" hide />
+              <YAxis hide tickCount={7} />
             </AreaChart>
           </ResponsiveContainer>
         ) : (
@@ -173,7 +184,7 @@ export function TimeSeriesCard({
       </div>
 
       {/* Axis Footer: Start & End Date */}
-      <div className="flex items-center justify-between text-xs font-medium text-text-muted pt-1 px-[10px]">
+      <div className="flex items-center justify-between text-sm font-medium text-text-muted pt-1 px-[10px]">
         <span>{startDate}</span>
         <span>{endDate}</span>
       </div>
