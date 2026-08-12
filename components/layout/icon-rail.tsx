@@ -37,7 +37,7 @@ export function IconRail() {
   return (
     <aside className="w-[68px] min-w-[68px] h-screen bg-[#131417] border-r border-[#20232B] flex flex-col items-center select-none z-20">
       {/* Top Logo Section matching reference image header */}
-      <div className="w-full h-16 flex items-center justify-center border-b border-[#20232B] hover:opacity-90 transition-opacity cursor-pointer">
+      <div className="w-full h-16 shrink-0 flex items-center justify-center border-b border-[#20232B] hover:opacity-90 transition-opacity cursor-pointer">
         <Logo size={34} color="#2BB0ED" />
       </div>
 

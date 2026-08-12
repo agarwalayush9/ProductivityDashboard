@@ -19,7 +19,7 @@ export function SideNav({ isCollapsed, onToggleCollapse }: SideNavProps) {
       )}
     >
       {/* Header */}
-      <div className="h-16 px-5 flex items-center justify-between border-b border-[#1E2129]">
+      <div className="h-16 shrink-0 px-5 flex items-center justify-between border-b border-[#1E2129]">
         <span className="text-base font-bold tracking-wide text-text-primary">
           SEO
         </span>

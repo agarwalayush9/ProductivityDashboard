@@ -4,7 +4,7 @@ import { Layers, Calendar } from "lucide-react";
 
 export function TopHeader() {
   return (
-    <header className="h-16 px-8 border-b border-[#1E2129] flex items-center justify-between bg-[#13151A] sticky top-0 z-10 select-none">
+    <header className="h-16 shrink-0 px-8 border-b border-[#1E2129] flex items-center justify-between bg-[#13151A] sticky top-0 z-10 select-none">
       {/* Title */}
       <div>
         <h1 className="text-base font-bold tracking-wide text-text-primary">Dashboard</h1>

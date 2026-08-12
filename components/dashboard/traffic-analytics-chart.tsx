@@ -148,12 +148,12 @@ export function TrafficAnalyticsChart({ data }: TrafficAnalyticsChartProps) {
       </div>
 
       {/* Complete from Base Bar Chart */}
-      <div className="h-[280px] w-full pt-2">
+      <div className="h-[320px] w-full mt-2">
         {mounted ? (
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={chartData}
-              margin={{ top: 32, right: 10, left: 10, bottom: 0 }}
+              margin={{ top: 10, right: 10, left: 10, bottom: 0 }}
               barCategoryGap="18%"
             >
               {/* Dashed Horizontal Background Grid Lines */}
@@ -179,7 +179,7 @@ export function TrafficAnalyticsChart({ data }: TrafficAnalyticsChartProps) {
                     x2="10"
                     y2="0"
                     stroke="#1A1C24"
-                    strokeWidth="3"
+                    strokeWidth="6.15"
                   />
                 </pattern>
               </defs>
@@ -232,6 +232,7 @@ export function TrafficAnalyticsChart({ data }: TrafficAnalyticsChartProps) {
               />
 
               <XAxis dataKey="date" hide />
+              <YAxis hide domain={[0, 30000]} />
             </BarChart>
           </ResponsiveContainer>
         ) : (
@@ -240,7 +241,8 @@ export function TrafficAnalyticsChart({ data }: TrafficAnalyticsChartProps) {
       </div>
 
       {/* Axis Footer: Start & End Date */}
-      <div className="flex items-center justify-between text-xs font-medium text-[#6B7280] pt-1 border-t border-[#20232B]">
+      <div className="flex items-center justify-between text-xs font-medium text-[#6B7280] pt-1">
+
         <span>January 1, 2026</span>
         <span>July 1, 2026</span>
       </div>

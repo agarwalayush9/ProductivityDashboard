@@ -8,6 +8,7 @@ import {
   XAxis,
   Tooltip,
   ResponsiveContainer,
+  CartesianGrid,
 } from "recharts";
 import { Card } from "@/components/ui/card";
 import { FilterPill } from "@/components/ui/filter-pill";
@@ -25,33 +26,54 @@ interface TimeSeriesCardProps {
   pillValue?: string;
 }
 
-// Custom Label component for the Avg badge floating on the reference line
+// Custom Label component for the Avg badge, highlight column, and reference line
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const AverageBadgeLabel = (props: { viewBox?: any; value?: string }) => {
   const { viewBox, value } = props;
   if (!viewBox) return null;
-  const { x, y } = viewBox;
+  const { x, y, height } = viewBox;
+
   return (
-    <g transform={`translate(${x - 44}, ${y - 32})`}>
-      <rect
-        width="88"
-        height="26"
-        rx="13"
-        fill="#171A21"
-        stroke="#22252C"
+    <g>
+      {/* Highlight column behind the line */}
+      <rect x={x - 45} y={0} width="90" height={height} fill="#FFFFFF" fillOpacity="0.04" />
+
+      {/* Dotted reference line starting below the badge */}
+      <line
+        x1={x}
+        y1={42}
+        x2={x}
+        y2={height}
+        stroke="#D1D5DB"
+        strokeDasharray="3 3"
         strokeWidth="1"
       />
-      <text
-        x="44"
-        y="17"
-        fill="#F3F4F6"
-        textAnchor="middle"
-        fontSize="11"
-        fontWeight="600"
-        className="font-sans"
-      >
-        Avg {value}
-      </text>
+
+      {/* Badge container shifted to be at the top */}
+      <g transform={`translate(${x - 45}, 10)`}>
+        {/* Pill background */}
+        <rect width="90" height="28" rx="14" fill="#202228" stroke="#33353A" strokeWidth="1" />
+
+        {/* Blue chart icon */}
+        <rect x="14" y="14" width="3" height="6" rx="1.5" fill="#1CA0F2" />
+        <rect x="19" y="10" width="3" height="10" rx="1.5" fill="#1CA0F2" />
+        <rect x="24" y="12" width="3" height="8" rx="1.5" fill="#1CA0F2" />
+
+        {/* Text */}
+        <text
+          x="32"
+          y="19"
+          fill="#D1D5DB"
+          fontSize="11"
+          fontWeight="500"
+          className="font-sans"
+        >
+          Avg {value}
+        </text>
+      </g>
+
+      {/* White downward triangle at the bottom of the pill */}
+      <polygon points={`${x - 4},38 ${x + 4},38 ${x},44`} fill="#FFFFFF" />
     </g>
   );
 };
@@ -89,17 +111,20 @@ export function TimeSeriesCard({
       </div>
 
       {/* Chart */}
-      <div className="h-[200px] w-full pt-4">
+      <div className="h-[330px] w-full pt-4">
         {mounted ? (
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={data}
-              margin={{ top: 32, right: 10, left: 10, bottom: 0 }}
+              margin={{ top: 10, right: 10, left: 10, bottom: 0 }}
             >
+              {/* Dashed Horizontal Background Grid Lines */}
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#22252E" />
+
               <defs>
                 <linearGradient id={`gradient-${title.replace(/\s+/g, "")}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#38BDF8" stopOpacity={0.25} />
-                  <stop offset="95%" stopColor="#38BDF8" stopOpacity={0.0} />
+                  <stop offset="5%" stopColor="#1CA0F2" stopOpacity={0.25} />
+                  <stop offset="95%" stopColor="#1CA0F2" stopOpacity={0.0} />
                 </linearGradient>
               </defs>
 
@@ -125,9 +150,7 @@ export function TimeSeriesCard({
               {refPoint && (
                 <ReferenceLine
                   x={refPoint.date}
-                  stroke="#38BDF8"
-                  strokeDasharray="4 4"
-                  strokeWidth={1.5}
+                  stroke="none"
                   label={<AverageBadgeLabel value={averageFormatted} />}
                 />
               )}
@@ -135,7 +158,7 @@ export function TimeSeriesCard({
               <Area
                 type="monotone"
                 dataKey="value"
-                stroke="#38BDF8"
+                stroke="#1CA0F2"
                 strokeWidth={2.5}
                 fillOpacity={1}
                 fill={`url(#gradient-${title.replace(/\s+/g, "")})`}
@@ -150,7 +173,7 @@ export function TimeSeriesCard({
       </div>
 
       {/* Axis Footer: Start & End Date */}
-      <div className="flex items-center justify-between text-xs font-medium text-text-muted pt-1 border-t border-surface-border/40">
+      <div className="flex items-center justify-between text-xs font-medium text-text-muted pt-1 px-[10px]">
         <span>{startDate}</span>
         <span>{endDate}</span>
       </div>
