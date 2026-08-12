@@ -14,7 +14,7 @@ export function SideNav({ isCollapsed, onToggleCollapse }: SideNavProps) {
   return (
     <aside
       className={cn(
-        "h-screen bg-[#111216] border-r border-[#1E2129] flex flex-col transition-all duration-300 ease-in-out relative select-none z-10",
+        "h-screen bg-[#1B1B1D] border-r border-[#1E2129] flex flex-col transition-all duration-300 ease-in-out relative select-none z-10",
         isCollapsed ? "w-0 overflow-hidden border-r-0" : "w-[240px] min-w-[240px]"
       )}
     >

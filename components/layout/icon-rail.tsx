@@ -35,7 +35,7 @@ export function IconRail() {
   ];
 
   return (
-    <aside className="w-[68px] min-w-[68px] h-screen bg-[#131417] border-r border-[#20232B] flex flex-col items-center select-none z-20">
+    <aside className="w-[68px] min-w-[68px] h-screen bg-[#1B1B1D] border-r border-[#20232B] flex flex-col items-center select-none z-20">
       {/* Top Logo Section matching reference image header */}
       <div className="w-full h-16 shrink-0 flex items-center justify-center border-b border-[#20232B] hover:opacity-90 transition-opacity cursor-pointer">
         <Logo size={34} color="#2BB0ED" />
@@ -57,32 +57,33 @@ export function IconRail() {
       </nav>
 
       {/* Bottom Actions */}
-      <div className="mt-auto flex flex-col gap-3 items-center py-4 border-t border-[#20232B]">
+      <div className="mt-auto flex flex-col gap-4 items-center py-4 border-t border-[#20232B]">
         <CircleIconButton
           icon={User}
           title="User Profile"
-          size={38}
-          iconSize={18}
+          size={42}
+          iconSize={20}
         />
-        <CircleIconButton
-          icon={Moon}
-          title="Dark Mode (Active)"
-          size={38}
-          iconSize={18}
-          active
-        />
-        <CircleIconButton
-          icon={Sun}
-          title="Light Mode"
-          size={38}
-          iconSize={18}
-        />
+        
+        {/* Theme Toggle Pill */}
+        <div className="flex flex-col items-center bg-[#17191E] rounded-full p-[3px] border border-[#20232A]">
+          {/* Active Moon */}
+          <div className="w-[36px] h-[36px] rounded-full bg-[#2A2E35] border border-[#333740] flex items-center justify-center cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+            <Moon size={18} color="#FFFFFF" fill="#FFFFFF" strokeWidth={2.5} />
+          </div>
+          {/* Inactive Sun */}
+          <div className="w-[36px] h-[36px] rounded-full flex items-center justify-center cursor-pointer hover:bg-white/5 transition-colors">
+            <Sun size={18} color="#6B7280" strokeWidth={2} />
+          </div>
+        </div>
+
         <CircleIconButton
           icon={LogOut}
           title="Logout"
-          size={38}
-          iconSize={18}
-          className="hover:text-status-negative hover:border-status-negative/30 hover:bg-status-negative/10"
+          size={42}
+          iconSize={20}
+          iconClassName="text-[#F03E3E] group-hover:text-[#F03E3E]"
+          className="hover:border-[#F03E3E]/30 hover:bg-[#F03E3E]/10"
         />
       </div>
     </aside>

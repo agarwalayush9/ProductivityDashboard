@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { IconRail } from "@/components/layout/icon-rail";
-import { SideNav, SideNavExpandButton } from "@/components/layout/side-nav";
+import { SideNav } from "@/components/layout/side-nav";
 import { TopHeader } from "@/components/layout/top-header";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { TrafficAnalyticsChart } from "@/components/dashboard/traffic-analytics-chart";
@@ -28,16 +28,12 @@ export default function DashboardPage() {
         onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
       />
 
-      {/* Expand button when sidebar is collapsed */}
-      {isSidebarCollapsed && (
-        <SideNavExpandButton
-          onExpand={() => setIsSidebarCollapsed(false)}
-        />
-      )}
-
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col h-screen overflow-y-auto min-w-0 bg-[#1E1E20]">
-        <TopHeader />
+        <TopHeader 
+          isSidebarCollapsed={isSidebarCollapsed}
+          onExpand={() => setIsSidebarCollapsed(false)}
+        />
 
         {/* Flush Grid Floor Layout (0px outer padding/margin against SideNav and TopNav) */}
         <div className="p-0 space-y-[3px] w-full bg-[#1E1E20]">
